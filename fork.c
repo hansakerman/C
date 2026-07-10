@@ -17,7 +17,7 @@ int main (int argc, char *argv[])
     printf("hello, I am a child process (pid:%d)\n", (int) getpid());
     sleep(1);
   } else {
-    // parant goes donw this path (original process)
+    // parent goes down this path (original process)
     printf("hello, I am the parent of %d (pid:%d)\n", rc, (int) getpid());
     sleep(1);
   }
