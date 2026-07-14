@@ -84,7 +84,12 @@ void check_win(uint16_t *O, uint16_t *X, uint16_t win_pattern[8]){
     }
 
     // A full board gives the value 2^9 and we exit as draw.
+    if( (*O | *X) == 0b111111111){
+      printf("Full board. DRAW!\n");
+      exit(0);
+    }
 
+      
   }
 }
 
