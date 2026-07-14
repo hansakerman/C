@@ -2,6 +2,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#define NO_WINPATTERNS 8
+
 // This is not entirely serious. : ) The datamodel is built in two integers and bit operations.
 
 // BUGS: Scanf still have stuff in input buffer if you accidentaly press wrong key (like a letter).
@@ -71,7 +73,7 @@ void apply_move(uint16_t *current,int played){
 }
 
 void check_win(uint16_t *O, uint16_t *X, uint16_t win_pattern[8]){
-  for (int i = 0; i < 8 ; ++i ){
+  for (int i = 0; i < NO_WINPATTERNS ; ++i ){
     
     if ( (*O & win_pattern[i]) == win_pattern[i] ){
       printf("NOUGHT WINS!\n");
@@ -82,15 +84,14 @@ void check_win(uint16_t *O, uint16_t *X, uint16_t win_pattern[8]){
       printf("CROSSES WINS!\n");
       exit(0);
     }
-
-    // A full board gives the value 2^9 and we exit as draw.
-    if( (*O | *X) == 0b111111111){
-      printf("Full board. DRAW!\n");
-      exit(0);
-    }
-
-      
   }
+
+  // A full board gives the value 2^9 and we exit as draw.
+  if( (*O | *X) == 0b111111111){
+    printf("Full board. DRAW!\n");
+    exit(0);
+  }
+
 }
 
 int main(){
