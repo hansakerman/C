@@ -2,10 +2,9 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-// This is not entirely serious. : ) A friends programming student
-// handed in a crappy vibe coded C# implementation of tic tac toe so I
-// did this in a quite conveluted way. C rocks.
-// ps. The code is totally unreadable.
+// This is not entirely serious. : ) The datamodel is built in two integers and bit operations.
+
+// BUGS: Scanf still have stuff in input buffer if you accidentaly press wrong key (like a letter).
 
 void render_board(uint16_t O, uint16_t X){
   int mask;
@@ -48,7 +47,7 @@ int get_player_input(uint16_t O, uint16_t X ,char *player){
   while ( !legal ) {
     printf("Play as %s: ", player);
     scanf("%hd", &input);
-
+    
     const char *error_i = check_input(input);
     if (error_i != NULL){
       printf("%s", error_i);
@@ -66,7 +65,6 @@ int get_player_input(uint16_t O, uint16_t X ,char *player){
   return input;
 }
 
-
 void apply_move(uint16_t *current,int played){
   // Mask the current board with the new move. 
   *current |= 1 << (played - 1);
@@ -80,10 +78,13 @@ void check_win(uint16_t *O, uint16_t *X, uint16_t win_pattern[8]){
       exit(0);
     }
 
-    if ( (*O & win_pattern[i]) == win_pattern[i] ){
+    if ( (*X & win_pattern[i]) == win_pattern[i] ){
       printf("CROSSES WINS!\n");
       exit(0);
     }
+
+    // A full board gives the value 2^9 and we exit as draw.
+
   }
 }
 
@@ -114,25 +115,19 @@ uint16_t win_pattern[8] = {
  // Game loop
 
  while ( 1 ) { // should be until win. We look at the winning patterns.
+   render_board(player.O, player.X);
+   check_win(&player.O, &player.X, win_pattern);
 
    // Player 1 NAUGHTS
-   render_board(player.O, player.X);
-   // Player putting NAUGHTS (O).
    played = get_player_input(player.O, player.X,"O");
-   // apply player NAUGHT move
    apply_move(&player.O,played);
+
    render_board(player.O, player.X);
    check_win(&player.O, &player.X, win_pattern);
 
    // Player 2 CROSSES
-
-   // Player putting CROSS (X).
    played = get_player_input(player.X, player.O,"X");
-   // apply player CROSS (X).
    apply_move(&player.X,played);
-
  }
 }
 
-//After win. Another game?
-//restart
